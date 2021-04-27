@@ -1,8 +1,30 @@
-import React from "react";
-import servicesData from "./data/services.json";
-import accessibilitiesData from "./data/accessibilities.json";
+import React, { useState, useEffect } from "react";
 
 const HotelInfo = () => {
+    // state
+    const [servicesData, setServicesData] = useState([]);
+    const [accessibilitiesData, setAccessibilitiesData] = useState([]);
+
+    // effects
+    useEffect(() => {
+        getServicesData();
+        getAccessibilitiesData();
+    }, []);
+
+    // methods
+    const getServicesData = async () => {
+        const response = await fetch('https://84rizytwqa.execute-api.us-west-2.amazonaws.com/Production/services', { method: 'GET' });
+        const jsonData = await response.json();
+        setServicesData(jsonData);
+    };
+
+    const getAccessibilitiesData = async () => {
+        const response = await fetch('https://84rizytwqa.execute-api.us-west-2.amazonaws.com/Production/accessibilities', { method: 'GET' });
+        const jsonData = await response.json();
+        setAccessibilitiesData(jsonData);
+    };
+
+    // render
     return (
         <div className="scene" id="hotelinfo">
             <article className="heading">
@@ -24,14 +46,14 @@ const HotelInfo = () => {
                     <h2>Services and Amenities</h2>
                     <p>Our services and amenities are designed to make your travel easy, your stay comfortable, and your experience one-of-a-kind.</p>
                     <ul>
-                        {servicesData.map(service => <li>{service.name}</li>)}
+                        {servicesData.map(service => <li key={service.name}>{service.name}</li>)}
                     </ul>
                 </section>
                 <section className="checklist" id="accessibility">
                     <h2>Accessibility</h2>
                     <p>We're committed to maintaining the same quality of service for every individual. We offer the following facilities for those with special needs:</p>
                     <ul>
-                        {accessibilitiesData.map(feature => <li>{feature.name}</li>)}
+                        {accessibilitiesData.map(feature => <li key={feature.name}>{feature.name}</li>)}
                     </ul>
                 </section>
             </article>
